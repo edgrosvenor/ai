@@ -68,9 +68,11 @@ trait GeneratesEmbeddings
             throw $e;
         }
 
-        return tap($response, fn (EmbeddingsResponse $response) => $this->events->dispatch(new EmbeddingsGenerated(
+        $this->events->dispatch(new EmbeddingsGenerated(
             $invocationId, $this, $model, $prompt, $response,
-        )));
+        ));
+
+        return $response;
     }
 
     /**

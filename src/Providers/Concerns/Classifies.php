@@ -54,8 +54,10 @@ trait Classifies
             throw $e;
         }
 
-        return tap($response, fn (ClassificationResponse $response) => $this->events->dispatch(new Classified(
+        $this->events->dispatch(new Classified(
             $invocationId, $this, $model, $prompt, $response,
-        )));
+        ));
+
+        return $response;
     }
 }

@@ -53,10 +53,10 @@ trait GeneratesTranscriptions
             throw $e;
         }
 
-        return tap($response, function (TranscriptionResponse $response) use ($invocationId, $model, $prompt): void {
-            $this->events->dispatch(new TranscriptionGenerated(
-                $invocationId, $this, $model, $prompt, $response
-            ));
-        });
+        $this->events->dispatch(new TranscriptionGenerated(
+            $invocationId, $this, $model, $prompt, $response,
+        ));
+
+        return $response;
     }
 }

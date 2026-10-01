@@ -56,10 +56,10 @@ trait GeneratesImages
             throw $e;
         }
 
-        return tap($response, function (ImageResponse $response) use ($invocationId, $prompt, $model): void {
-            $this->events->dispatch(new ImageGenerated(
-                $invocationId, $this, $model, $prompt, $response,
-            ));
-        });
+        $this->events->dispatch(new ImageGenerated(
+            $invocationId, $this, $model, $prompt, $response,
+        ));
+
+        return $response;
     }
 }

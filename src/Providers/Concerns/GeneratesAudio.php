@@ -52,10 +52,10 @@ trait GeneratesAudio
             throw $e;
         }
 
-        return tap($response, function (AudioResponse $response) use ($invocationId, $model, $prompt): void {
-            $this->events->dispatch(new AudioGenerated(
-                $invocationId, $this, $model, $prompt, $response,
-            ));
-        });
+        $this->events->dispatch(new AudioGenerated(
+            $invocationId, $this, $model, $prompt, $response,
+        ));
+
+        return $response;
     }
 }

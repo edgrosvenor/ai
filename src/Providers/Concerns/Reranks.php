@@ -53,8 +53,10 @@ trait Reranks
             throw $e;
         }
 
-        return tap($response, fn (RerankingResponse $response) => $this->events->dispatch(new Reranked(
+        $this->events->dispatch(new Reranked(
             $invocationId, $this, $model, $prompt, $response,
-        )));
+        ));
+
+        return $response;
     }
 }
