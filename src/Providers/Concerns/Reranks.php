@@ -36,7 +36,7 @@ trait Reranks
         ));
 
         try {
-            return tap($this->rerankingGateway()->rerank(
+            $response = $this->rerankingGateway()->rerank(
                 $this,
                 $model,
                 $documents,
@@ -44,9 +44,7 @@ trait Reranks
                 $limit,
                 $timeout,
                 $providerOptions,
-            ), fn (RerankingResponse $response) => $this->events->dispatch(new Reranked(
-                $invocationId, $this, $model, $prompt, $response,
-            )));
+            );
         } catch (Throwable $e) {
             $this->events->dispatch(new RerankingFailed(
                 $invocationId, $this, $model, $prompt, $e,
@@ -54,5 +52,9 @@ trait Reranks
 
             throw $e;
         }
+
+        return tap($response, fn (RerankingResponse $response) => $this->events->dispatch(new Reranked(
+            $invocationId, $this, $model, $prompt, $response,
+        )));
     }
 }

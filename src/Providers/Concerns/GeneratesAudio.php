@@ -41,13 +41,9 @@ trait GeneratesAudio
         ));
 
         try {
-            return tap($this->audioGateway()->generateAudio(
+            $response = $this->audioGateway()->generateAudio(
                 $this, $model, $prompt->text, $prompt->voice, $prompt->instructions, $timeout, $prompt->providerOptions,
-            ), function (AudioResponse $response) use ($invocationId, $model, $prompt): void {
-                $this->events->dispatch(new AudioGenerated(
-                    $invocationId, $this, $model, $prompt, $response,
-                ));
-            });
+            );
         } catch (Throwable $e) {
             $this->events->dispatch(new AudioFailed(
                 $invocationId, $this, $model, $prompt, $e,
@@ -55,5 +51,11 @@ trait GeneratesAudio
 
             throw $e;
         }
+
+        return tap($response, function (AudioResponse $response) use ($invocationId, $model, $prompt): void {
+            $this->events->dispatch(new AudioGenerated(
+                $invocationId, $this, $model, $prompt, $response,
+            ));
+        });
     }
 }

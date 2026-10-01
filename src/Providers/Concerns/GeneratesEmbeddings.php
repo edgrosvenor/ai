@@ -52,16 +52,14 @@ trait GeneratesEmbeddings
         ));
 
         try {
-            return tap($this->embeddingGateway()->generateEmbeddings(
+            $response = $this->embeddingGateway()->generateEmbeddings(
                 $this,
                 $model,
                 $inputs,
                 $dimensions,
                 $timeout,
                 $providerOptions,
-            ), fn (EmbeddingsResponse $response) => $this->events->dispatch(new EmbeddingsGenerated(
-                $invocationId, $this, $model, $prompt, $response,
-            )));
+            );
         } catch (Throwable $e) {
             $this->events->dispatch(new EmbeddingsFailed(
                 $invocationId, $this, $model, $prompt, $e,
@@ -69,6 +67,10 @@ trait GeneratesEmbeddings
 
             throw $e;
         }
+
+        return tap($response, fn (EmbeddingsResponse $response) => $this->events->dispatch(new EmbeddingsGenerated(
+            $invocationId, $this, $model, $prompt, $response,
+        )));
     }
 
     /**

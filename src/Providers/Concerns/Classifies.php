@@ -38,16 +38,14 @@ trait Classifies
         ));
 
         try {
-            return tap($this->classificationGateway()->classify(
+            $response = $this->classificationGateway()->classify(
                 $this,
                 $model,
                 $state,
                 $questions,
                 $timeout,
                 $providerOptions,
-            ), fn (ClassificationResponse $response) => $this->events->dispatch(new Classified(
-                $invocationId, $this, $model, $prompt, $response,
-            )));
+            );
         } catch (Throwable $e) {
             $this->events->dispatch(new ClassificationFailed(
                 $invocationId, $this, $model, $prompt, $e,
@@ -55,5 +53,9 @@ trait Classifies
 
             throw $e;
         }
+
+        return tap($response, fn (ClassificationResponse $response) => $this->events->dispatch(new Classified(
+            $invocationId, $this, $model, $prompt, $response,
+        )));
     }
 }

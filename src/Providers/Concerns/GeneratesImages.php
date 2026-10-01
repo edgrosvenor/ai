@@ -45,13 +45,9 @@ trait GeneratesImages
         ));
 
         try {
-            return tap($this->imageGateway()->generateImage(
+            $response = $this->imageGateway()->generateImage(
                 $this, $model, $prompt->prompt, $prompt->attachments->all(), $prompt->size, $prompt->quality, $timeout, $prompt->providerOptions,
-            ), function (ImageResponse $response) use ($invocationId, $prompt, $model): void {
-                $this->events->dispatch(new ImageGenerated(
-                    $invocationId, $this, $model, $prompt, $response,
-                ));
-            });
+            );
         } catch (Throwable $e) {
             $this->events->dispatch(new ImageFailed(
                 $invocationId, $this, $model, $prompt, $e,
@@ -59,5 +55,11 @@ trait GeneratesImages
 
             throw $e;
         }
+
+        return tap($response, function (ImageResponse $response) use ($invocationId, $prompt, $model): void {
+            $this->events->dispatch(new ImageGenerated(
+                $invocationId, $this, $model, $prompt, $response,
+            ));
+        });
     }
 }

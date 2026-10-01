@@ -42,13 +42,9 @@ trait GeneratesTranscriptions
         ));
 
         try {
-            return tap($this->transcriptionGateway()->generateTranscription(
+            $response = $this->transcriptionGateway()->generateTranscription(
                 $this, $model, $prompt->audio, $prompt->language, $prompt->diarize, $prompt->timeout ?? 30, $prompt->providerOptions
-            ), function (TranscriptionResponse $response) use ($invocationId, $model, $prompt): void {
-                $this->events->dispatch(new TranscriptionGenerated(
-                    $invocationId, $this, $model, $prompt, $response
-                ));
-            });
+            );
         } catch (Throwable $e) {
             $this->events->dispatch(new TranscriptionFailed(
                 $invocationId, $this, $model, $prompt, $e,
@@ -56,5 +52,11 @@ trait GeneratesTranscriptions
 
             throw $e;
         }
+
+        return tap($response, function (TranscriptionResponse $response) use ($invocationId, $model, $prompt): void {
+            $this->events->dispatch(new TranscriptionGenerated(
+                $invocationId, $this, $model, $prompt, $response
+            ));
+        });
     }
 }
