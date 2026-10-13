@@ -40,22 +40,15 @@ trait GeneratesAudio
             $invocationId, $this, $model, $prompt,
         ));
 
-        try {
-            $response = $this->audioGateway()->generateAudio(
+        return tap($this->dispatchingFailure(
+            fn () => $this->audioGateway()->generateAudio(
                 $this, $model, $prompt->text, $prompt->voice, $prompt->instructions, $timeout, $prompt->providerOptions,
-            );
-        } catch (Throwable $e) {
-            $this->events->dispatch(new AudioFailed(
-                $invocationId, $this, $model, $prompt, $e,
+            ),
+            fn (Throwable $e) => new AudioFailed($invocationId, $this, $model, $prompt, $e),
+        ), function (AudioResponse $response) use ($invocationId, $model, $prompt): void {
+            $this->events->dispatch(new AudioGenerated(
+                $invocationId, $this, $model, $prompt, $response,
             ));
-
-            throw $e;
-        }
-
-        $this->events->dispatch(new AudioGenerated(
-            $invocationId, $this, $model, $prompt, $response,
-        ));
-
-        return $response;
+        });
     }
 }

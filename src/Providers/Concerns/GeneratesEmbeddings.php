@@ -51,28 +51,19 @@ trait GeneratesEmbeddings
             $invocationId, $this, $model, $prompt,
         ));
 
-        try {
-            $response = $this->embeddingGateway()->generateEmbeddings(
+        return tap($this->dispatchingFailure(
+            fn () => $this->embeddingGateway()->generateEmbeddings(
                 $this,
                 $model,
                 $inputs,
                 $dimensions,
                 $timeout,
                 $providerOptions,
-            );
-        } catch (Throwable $e) {
-            $this->events->dispatch(new EmbeddingsFailed(
-                $invocationId, $this, $model, $prompt, $e,
-            ));
-
-            throw $e;
-        }
-
-        $this->events->dispatch(new EmbeddingsGenerated(
+            ),
+            fn (Throwable $e) => new EmbeddingsFailed($invocationId, $this, $model, $prompt, $e),
+        ), fn (EmbeddingsResponse $response) => $this->events->dispatch(new EmbeddingsGenerated(
             $invocationId, $this, $model, $prompt, $response,
-        ));
-
-        return $response;
+        )));
     }
 
     /**

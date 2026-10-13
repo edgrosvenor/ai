@@ -2,6 +2,7 @@
 
 namespace Laravel\Ai\Providers;
 
+use Closure;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -10,6 +11,7 @@ use Laravel\Ai\AiManager;
 use Laravel\Ai\Contracts\Gateway\Gateway;
 use Laravel\Ai\Contracts\Providers\Provider as ProviderContract;
 use Laravel\Ai\Enums\Lab;
+use Throwable;
 
 abstract class Provider implements \Stringable, ProviderContract
 {
@@ -68,6 +70,26 @@ abstract class Provider implements \Stringable, ProviderContract
         return tap(clone $this, function (self $provider) use ($headers): void {
             $provider->config['headers'] = array_merge($provider->config['headers'] ?? [], $headers);
         });
+    }
+
+    /**
+     * Run the given gateway call, dispatching the event built from its exception before rethrowing.
+     *
+     * @template TResult
+     *
+     * @param  Closure(): TResult  $call
+     * @param  Closure(Throwable): object  $failed
+     * @return TResult
+     */
+    protected function dispatchingFailure(Closure $call, Closure $failed): mixed
+    {
+        try {
+            return $call();
+        } catch (Throwable $e) {
+            $this->events->dispatch($failed($e));
+
+            throw $e;
+        }
     }
 
     /**

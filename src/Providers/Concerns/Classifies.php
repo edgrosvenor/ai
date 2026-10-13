@@ -37,27 +37,18 @@ trait Classifies
             $invocationId, $this, $model, $prompt,
         ));
 
-        try {
-            $response = $this->classificationGateway()->classify(
+        return tap($this->dispatchingFailure(
+            fn () => $this->classificationGateway()->classify(
                 $this,
                 $model,
                 $state,
                 $questions,
                 $timeout,
                 $providerOptions,
-            );
-        } catch (Throwable $e) {
-            $this->events->dispatch(new ClassificationFailed(
-                $invocationId, $this, $model, $prompt, $e,
-            ));
-
-            throw $e;
-        }
-
-        $this->events->dispatch(new Classified(
+            ),
+            fn (Throwable $e) => new ClassificationFailed($invocationId, $this, $model, $prompt, $e),
+        ), fn (ClassificationResponse $response) => $this->events->dispatch(new Classified(
             $invocationId, $this, $model, $prompt, $response,
-        ));
-
-        return $response;
+        )));
     }
 }

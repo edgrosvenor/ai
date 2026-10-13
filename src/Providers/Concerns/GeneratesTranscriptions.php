@@ -41,22 +41,15 @@ trait GeneratesTranscriptions
             $invocationId, $this, $model, $prompt,
         ));
 
-        try {
-            $response = $this->transcriptionGateway()->generateTranscription(
+        return tap($this->dispatchingFailure(
+            fn () => $this->transcriptionGateway()->generateTranscription(
                 $this, $model, $prompt->audio, $prompt->language, $prompt->diarize, $prompt->timeout ?? 30, $prompt->providerOptions
-            );
-        } catch (Throwable $e) {
-            $this->events->dispatch(new TranscriptionFailed(
-                $invocationId, $this, $model, $prompt, $e,
+            ),
+            fn (Throwable $e) => new TranscriptionFailed($invocationId, $this, $model, $prompt, $e),
+        ), function (TranscriptionResponse $response) use ($invocationId, $model, $prompt): void {
+            $this->events->dispatch(new TranscriptionGenerated(
+                $invocationId, $this, $model, $prompt, $response
             ));
-
-            throw $e;
-        }
-
-        $this->events->dispatch(new TranscriptionGenerated(
-            $invocationId, $this, $model, $prompt, $response,
-        ));
-
-        return $response;
+        });
     }
 }

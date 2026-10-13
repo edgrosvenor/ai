@@ -23,7 +23,7 @@ use Laravel\Ai\Image;
 use Laravel\Ai\Reranking as RerankingOperation;
 use Laravel\Ai\Transcription;
 
-test('non-agent failures dispatch an event and rethrow the original exception', function (Closure $fake, Closure $invoke, string $startingEvent, string $failureEvent): void {
+test('operation failures dispatch an event and rethrow the original exception', function (Closure $fake, Closure $invoke, string $startingEvent, string $failureEvent): void {
     Event::fake();
 
     $exception = new RuntimeException('Provider failed.');
@@ -49,9 +49,9 @@ test('non-agent failures dispatch an event and rethrow the original exception', 
         ->and($failed->model)->toBe($started->model)
         ->and($failed->prompt)->toBe($started->prompt)
         ->and($failed->exception)->toBe($exception);
-})->with('non-agent operations');
+})->with('operations');
 
-test('successful non-agent operations do not dispatch failure events', function (Closure $fake, Closure $invoke, string $startingEvent, string $failureEvent): void {
+test('successful operations do not dispatch failure events', function (Closure $fake, Closure $invoke, string $startingEvent, string $failureEvent): void {
     Event::fake();
 
     $fake([]);
@@ -59,7 +59,7 @@ test('successful non-agent operations do not dispatch failure events', function 
 
     Event::assertDispatchedTimes($startingEvent, 1);
     Event::assertNotDispatched($failureEvent);
-})->with('non-agent operations');
+})->with('operations');
 
 test('a throwing success listener does not report the operation as failed', function (): void {
     Embeddings::fake();
@@ -102,7 +102,7 @@ test('a recovered failover reports only the attempt that failed', function (): v
     Event::assertDispatched(EmbeddingsGenerated::class, fn (EmbeddingsGenerated $event): bool => $event->invocationId === $recoveredAttempt);
 });
 
-dataset('non-agent operations', [
+dataset('operations', [
     'embeddings' => [
         fn ($responses) => Embeddings::fake($responses),
         fn () => Embeddings::for(['Hello world'])->generate(),

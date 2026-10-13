@@ -44,22 +44,15 @@ trait GeneratesImages
             $invocationId, $this, $model, $prompt,
         ));
 
-        try {
-            $response = $this->imageGateway()->generateImage(
+        return tap($this->dispatchingFailure(
+            fn () => $this->imageGateway()->generateImage(
                 $this, $model, $prompt->prompt, $prompt->attachments->all(), $prompt->size, $prompt->quality, $timeout, $prompt->providerOptions,
-            );
-        } catch (Throwable $e) {
-            $this->events->dispatch(new ImageFailed(
-                $invocationId, $this, $model, $prompt, $e,
+            ),
+            fn (Throwable $e) => new ImageFailed($invocationId, $this, $model, $prompt, $e),
+        ), function (ImageResponse $response) use ($invocationId, $prompt, $model): void {
+            $this->events->dispatch(new ImageGenerated(
+                $invocationId, $this, $model, $prompt, $response,
             ));
-
-            throw $e;
-        }
-
-        $this->events->dispatch(new ImageGenerated(
-            $invocationId, $this, $model, $prompt, $response,
-        ));
-
-        return $response;
+        });
     }
 }
