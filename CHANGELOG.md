@@ -1,6 +1,70 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/ai/compare/v1.0.1...1.x)
+## [Unreleased](https://github.com/laravel/ai/compare/v1.2.1...1.x)
+
+## [v1.2.1](https://github.com/laravel/ai/compare/v1.2.0...v1.2.1) - 2026-10-12
+
+### What's Changed
+
+* Keep CopyFile from copying directories by [@yognevoy](https://github.com/yognevoy) in https://github.com/laravel/ai/pull/1109
+* Replay OpenRouter reasoning details in tool loops by [@CamilleScholtz](https://github.com/CamilleScholtz) in https://github.com/laravel/ai/pull/1110
+* Add Stop middleware to end agent runs early by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/ai/pull/1072
+* Decode structured output with unescaped quotes in object keys by [@augusto-dmh](https://github.com/augusto-dmh) in https://github.com/laravel/ai/pull/1111
+* Fix terminal Responses API stream handling by [@Marwzoor](https://github.com/Marwzoor) in https://github.com/laravel/ai/pull/1113
+* Use OpenRouter images endpoint for image generation by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/ai/pull/1116
+* [1.x] Use Ollama's native embedding dimensions when none are configured by [@medilies](https://github.com/medilies) in https://github.com/laravel/ai/pull/1115
+* Retry once after a short Retry-After before failing over by [@augusto-dmh](https://github.com/augusto-dmh) in https://github.com/laravel/ai/pull/1112
+
+### New Contributors
+
+* [@augusto-dmh](https://github.com/augusto-dmh) made their first contribution in https://github.com/laravel/ai/pull/1111
+* [@Marwzoor](https://github.com/Marwzoor) made their first contribution in https://github.com/laravel/ai/pull/1113
+* [@medilies](https://github.com/medilies) made their first contribution in https://github.com/laravel/ai/pull/1115
+
+**Full Changelog**: https://github.com/laravel/ai/compare/v1.2.0...v1.2.1
+
+## [v1.2.0](https://github.com/laravel/ai/compare/v1.1.0...v1.2.0) - 2026-10-07
+
+### What's Changed
+
+* Keep structured output format when provider options set output_config by [@kachelle](https://github.com/kachelle) in https://github.com/laravel/ai/pull/1105
+* Add OpenAI Decisions classification with image attachments by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/ai/pull/1106
+* fix: Fix structured output for Bedrock models without forced tool choice by [@cwilsn](https://github.com/cwilsn) in https://github.com/laravel/ai/pull/1104
+* Update Anthropic model defaults and skip sampling params on Claude 4.7+ by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/ai/pull/1107
+
+### New Contributors
+
+* [@cwilsn](https://github.com/cwilsn) made their first contribution in https://github.com/laravel/ai/pull/1104
+
+**Full Changelog**: https://github.com/laravel/ai/compare/v1.1.0...v1.2.0
+
+## [v1.1.0](https://github.com/laravel/ai/compare/v1.0.1...v1.1.0) - 2026-10-05
+
+### What's Changed
+
+* Skip provider tools the provider does not support by [@yognevoy](https://github.com/yognevoy) in https://github.com/laravel/ai/pull/1080
+* Support self-hosted Laya through the TypeSafe driver by [@mysticseagull](https://github.com/mysticseagull) in https://github.com/laravel/ai/pull/1081
+* [1.x] Add Cohere text generation support by [@mssayari](https://github.com/mssayari) in https://github.com/laravel/ai/pull/1078
+* Share the provider capability check in AiManager by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/ai/pull/1064
+* Document Boost and Laravel MCP 1.0 upgrade requirements by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/ai/pull/1087
+* Update provider default models to the latest releases by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/ai/pull/1095
+* Add Agent Skills support by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/ai/pull/1054
+* Allow built-in tools to require approval by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/ai/pull/1097
+* Send web search location to OpenRouter by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/ai/pull/1098
+* Add Azure tool search and Groq web search and code execution by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/ai/pull/1099
+* Add a MoveFile filesystem tool by [@yognevoy](https://github.com/yognevoy) in https://github.com/laravel/ai/pull/1092
+* fix: resolve stateless OpenAI file search replay by [@owenvoke](https://github.com/owenvoke) in https://github.com/laravel/ai/pull/1089
+* [ 1.x ] Fix: Stop an edited useChat user message from being replaced by the assistant reply message by [@vinitkadam03](https://github.com/vinitkadam03) in https://github.com/laravel/ai/pull/1076
+* Add HasSkills contract that gives agents the LoadSkill tool by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/ai/pull/1102
+* Send ElevenLabs query parameters in the query string by [@Taldres](https://github.com/Taldres) in https://github.com/laravel/ai/pull/1103
+
+### New Contributors
+
+* [@mysticseagull](https://github.com/mysticseagull) made their first contribution in https://github.com/laravel/ai/pull/1081
+* [@owenvoke](https://github.com/owenvoke) made their first contribution in https://github.com/laravel/ai/pull/1089
+* [@Taldres](https://github.com/Taldres) made their first contribution in https://github.com/laravel/ai/pull/1103
+
+**Full Changelog**: https://github.com/laravel/ai/compare/v1.0.1...v1.1.0
 
 ## [v1.0.1](https://github.com/laravel/ai/compare/v1.0.0...v1.0.1) - 2026-09-29
 

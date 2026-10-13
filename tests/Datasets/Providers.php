@@ -35,6 +35,11 @@ dataset('image-providers', [
     'openai-gpt-image-2' => ['openai', 'OPENAI_API_KEY', 'gpt-image-2'],
     'xai' => ['xai', 'XAI_API_KEY', 'grok-imagine-image'],
     'gemini-2.5-flash-image' => ['gemini', 'GEMINI_API_KEY', 'gemini-2.5-flash-image'],
+    'openrouter-gemini' => ['openrouter', 'OPENROUTER_API_KEY', 'google/gemini-3.1-flash-image'],
+    'openrouter-gpt-image' => ['openrouter', 'OPENROUTER_API_KEY', 'openai/gpt-image-1-mini'],
+    'openrouter-flux' => ['openrouter', 'OPENROUTER_API_KEY', 'black-forest-labs/flux-3-image'],
+    'openrouter-seedream' => ['openrouter', 'OPENROUTER_API_KEY', 'bytedance-seed/seedream-4.5'],
+    'openrouter-grok' => ['openrouter', 'OPENROUTER_API_KEY', 'x-ai/grok-imagine-image-2.0'],
 ]);
 
 dataset('file-providers', [
@@ -64,8 +69,13 @@ dataset('reranking-providers', [
 ]);
 
 dataset('classification-providers', [
+    'openai' => ['openai', 'OPENAI_API_KEY'],
     'openrouter' => ['openrouter', 'OPENROUTER_API_KEY'],
     'typesafe' => ['typesafe', 'TYPESAFE_API_KEY'],
+]);
+
+dataset('classification-image-providers', [
+    'openai' => ['openai', 'OPENAI_API_KEY'],
 ]);
 
 dataset('agent-providers', [
@@ -85,6 +95,7 @@ dataset('agent-providers', [
 dataset('tool-search-providers', [
     'anthropic' => ['anthropic', 'ANTHROPIC_API_KEY', 'claude-haiku-4-5-20251001'],
     'openai' => ['openai', 'OPENAI_API_KEY', 'gpt-6-sol'],
+    'azure' => ['azure', 'AZURE_OPENAI_API_KEY', 'gpt-5.4-mini'],
 ]);
 
 dataset('agent-document-providers', [
@@ -113,6 +124,7 @@ dataset('code-execution-providers', [
     'openai' => ['openai', 'OPENAI_API_KEY', 'gpt-6-sol'],
     'gemini' => ['gemini', 'GEMINI_API_KEY', 'gemini-3.1-flash-lite'],
     'xai' => ['xai', 'XAI_API_KEY', 'grok-4.6'],
+    'groq' => ['groq', 'GROQ_API_KEY', 'openai/gpt-oss-120b'],
 ]);
 
 dataset('reasoning-providers', [
