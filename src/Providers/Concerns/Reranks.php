@@ -45,7 +45,7 @@ trait Reranks
                 $timeout,
                 $providerOptions,
             ),
-            fn (Throwable $e) => new RerankingFailed($invocationId, $this, $model, $prompt, $e),
+            fn (Throwable $exception) => new RerankingFailed($invocationId, $this, $model, $prompt, $exception),
         ), fn (RerankingResponse $response) => $this->events->dispatch(new Reranked(
             $invocationId, $this, $model, $prompt, $response,
         )));

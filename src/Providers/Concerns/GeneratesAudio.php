@@ -44,7 +44,7 @@ trait GeneratesAudio
             fn () => $this->audioGateway()->generateAudio(
                 $this, $model, $prompt->text, $prompt->voice, $prompt->instructions, $timeout, $prompt->providerOptions,
             ),
-            fn (Throwable $e) => new AudioFailed($invocationId, $this, $model, $prompt, $e),
+            fn (Throwable $exception) => new AudioFailed($invocationId, $this, $model, $prompt, $exception),
         ), function (AudioResponse $response) use ($invocationId, $model, $prompt): void {
             $this->events->dispatch(new AudioGenerated(
                 $invocationId, $this, $model, $prompt, $response,

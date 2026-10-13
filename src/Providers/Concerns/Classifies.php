@@ -55,7 +55,7 @@ trait Classifies
                 $providerOptions,
                 $attachments,
             ),
-            fn (Throwable $e) => new ClassificationFailed($invocationId, $this, $model, $prompt, $e),
+            fn (Throwable $exception) => new ClassificationFailed($invocationId, $this, $model, $prompt, $exception),
         ), fn (ClassificationResponse $response) => $this->events->dispatch(new Classified(
             $invocationId, $this, $model, $prompt, $response,
         )));

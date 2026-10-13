@@ -6,6 +6,9 @@ use Laravel\Ai\Prompts\AudioPrompt;
 use Laravel\Ai\Providers\Provider;
 use Throwable;
 
+/**
+ * Dispatched once per failed attempt, including attempts failover recovers from.
+ */
 class AudioFailed
 {
     public function __construct(

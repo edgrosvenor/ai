@@ -41,7 +41,7 @@ trait ManagesFiles
         return tap(
             $this->dispatchingFailure(
                 fn () => $this->fileGateway()->putFile($this, $file),
-                fn (Throwable $e) => new StoringFileFailed($invocationId, $this, $file, $e),
+                fn (Throwable $exception) => new StoringFileFailed($invocationId, $this, $file, $exception),
             ),
             function (StoredFileResponse $response) use ($invocationId, $file): void {
                 $this->events->dispatch(new FileStored(

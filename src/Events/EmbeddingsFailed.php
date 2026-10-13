@@ -6,6 +6,9 @@ use Laravel\Ai\Prompts\EmbeddingsPrompt;
 use Laravel\Ai\Providers\Provider;
 use Throwable;
 
+/**
+ * Dispatched once per failed attempt, including attempts failover recovers from.
+ */
 class EmbeddingsFailed
 {
     public function __construct(

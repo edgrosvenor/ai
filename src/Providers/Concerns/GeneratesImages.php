@@ -48,7 +48,7 @@ trait GeneratesImages
             fn () => $this->imageGateway()->generateImage(
                 $this, $model, $prompt->prompt, $prompt->attachments->all(), $prompt->size, $prompt->quality, $timeout, $prompt->providerOptions,
             ),
-            fn (Throwable $e) => new ImageFailed($invocationId, $this, $model, $prompt, $e),
+            fn (Throwable $exception) => new ImageFailed($invocationId, $this, $model, $prompt, $exception),
         ), function (ImageResponse $response) use ($invocationId, $prompt, $model): void {
             $this->events->dispatch(new ImageGenerated(
                 $invocationId, $this, $model, $prompt, $response,

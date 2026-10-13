@@ -6,6 +6,9 @@ use Laravel\Ai\Prompts\ClassificationPrompt;
 use Laravel\Ai\Providers\Provider;
 use Throwable;
 
+/**
+ * Dispatched once per failed attempt, including attempts failover recovers from.
+ */
 class ClassificationFailed
 {
     public function __construct(

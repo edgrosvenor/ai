@@ -60,7 +60,7 @@ trait GeneratesEmbeddings
                 $timeout,
                 $providerOptions,
             ),
-            fn (Throwable $e) => new EmbeddingsFailed($invocationId, $this, $model, $prompt, $e),
+            fn (Throwable $exception) => new EmbeddingsFailed($invocationId, $this, $model, $prompt, $exception),
         ), fn (EmbeddingsResponse $response) => $this->events->dispatch(new EmbeddingsGenerated(
             $invocationId, $this, $model, $prompt, $response,
         )));

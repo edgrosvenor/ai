@@ -54,7 +54,7 @@ trait ManagesStores
         return tap(
             $this->dispatchingFailure(
                 fn () => $this->storeGateway()->createStore($this, $name, $description, $fileIds, $expiresWhenIdleFor),
-                fn (Throwable $e) => new CreatingStoreFailed($invocationId, $this, $name, $description, $fileIds, $expiresWhenIdleFor, $e),
+                fn (Throwable $exception) => new CreatingStoreFailed($invocationId, $this, $name, $description, $fileIds, $expiresWhenIdleFor, $exception),
             ),
             function (Store $store) use ($invocationId, $name, $description, $fileIds, $expiresWhenIdleFor): void {
                 $this->events->dispatch(new StoreCreated(
@@ -78,7 +78,7 @@ trait ManagesStores
         return tap(
             $this->dispatchingFailure(
                 fn () => $this->storeGateway()->addFile($this, $storeId, $file->id(), $metadata),
-                fn (Throwable $e) => new AddingFileToStoreFailed($invocationId, $this, $storeId, $file->id(), $e),
+                fn (Throwable $exception) => new AddingFileToStoreFailed($invocationId, $this, $storeId, $file->id(), $exception),
             ),
             function (string $documentId) use ($invocationId, $storeId, $file): void {
                 $this->events->dispatch(new FileAddedToStore(
@@ -108,7 +108,7 @@ trait ManagesStores
         return tap(
             $this->dispatchingFailure(
                 fn () => $this->storeGateway()->removeFile($this, $storeId, $documentId),
-                fn (Throwable $e) => new RemovingFileFromStoreFailed($invocationId, $this, $storeId, $documentId, $e),
+                fn (Throwable $exception) => new RemovingFileFromStoreFailed($invocationId, $this, $storeId, $documentId, $exception),
             ),
             function () use ($invocationId, $storeId, $documentId): void {
                 $this->events->dispatch(new FileRemovedFromStore(

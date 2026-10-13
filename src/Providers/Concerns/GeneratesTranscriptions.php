@@ -45,7 +45,7 @@ trait GeneratesTranscriptions
             fn () => $this->transcriptionGateway()->generateTranscription(
                 $this, $model, $prompt->audio, $prompt->language, $prompt->diarize, $prompt->timeout ?? 30, $prompt->providerOptions
             ),
-            fn (Throwable $e) => new TranscriptionFailed($invocationId, $this, $model, $prompt, $e),
+            fn (Throwable $exception) => new TranscriptionFailed($invocationId, $this, $model, $prompt, $exception),
         ), function (TranscriptionResponse $response) use ($invocationId, $model, $prompt): void {
             $this->events->dispatch(new TranscriptionGenerated(
                 $invocationId, $this, $model, $prompt, $response
